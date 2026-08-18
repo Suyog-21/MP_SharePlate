@@ -43,14 +43,14 @@ const NGODashboard = () => {
           <div className="card mb-4 text-center">
             <h3>NGO Profile</h3>
             <p className="text-secondary mb-4">{user.name}</p>
-            <div className="mt-4">
+            {/* <div className="mt-4">
               <p style={{ fontSize: '2rem', color: 'var(--success-color)', fontWeight: 'bold', margin: 0 }}>{user.stats.pickupsCompleted}</p>
               <p className="text-secondary text-sm">Pickups Completed</p>
-            </div>
-            <div className="mt-4">
+            </div> */}
+            {/* <div className="mt-4">
               <p style={{ fontSize: '2rem', color: 'var(--warning-color)', fontWeight: 'bold', margin: 0 }}>{user.stats.reliabilityScore}</p>
               <p className="text-secondary text-sm">Reliability Score</p>
-            </div>
+            </div> */}
           </div>
 
           {/* Active Claims */}

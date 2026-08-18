@@ -53,18 +53,18 @@ const RestaurantDashboard = () => {
         <div>
           <div className="card mb-4 text-center">
             <h3>Impact Dashboard</h3>
-            <div className="mt-4">
+            {/* <div className="mt-4">
               <p style={{ fontSize: '2rem', color: 'var(--primary-color)', fontWeight: 'bold', margin: 0 }}>{totalMeals}</p>
               <p className="text-secondary text-sm">Meals Saved</p>
             </div>
             <div className="mt-4">
               <p style={{ fontSize: '2rem', color: 'var(--success-color)', fontWeight: 'bold', margin: 0 }}>{co2Reduced} kg</p>
-              <p className="text-secondary text-sm">CO₂ Emissions Reduced</p>
+              <p className="text-secondary text-sm">Food Served</p>
             </div>
             <div className="mt-4">
               <p style={{ fontSize: '2rem', color: 'var(--warning-color)', fontWeight: 'bold', margin: 0 }}>{user.stats.reliabilityScore}</p>
-              <p className="text-secondary text-sm">Sustainability Score</p>
-            </div>
+              <p className="text-secondary text-sm">SharePlate Score</p>
+            </div> */}
           </div>
         </div>
 

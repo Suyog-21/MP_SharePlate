@@ -16,8 +16,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="container">
         <Link to="/" className="nav-brand">
-          <Leaf size={28} />
-          EcoRescue
+          SharePlate
         </Link>
         <div className="nav-links">
           {!user ? (
