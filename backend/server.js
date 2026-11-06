@@ -220,9 +220,9 @@ const startServer = async () => {
     await connectMongoDB();
     await seedDefaultAccounts();
 
-    app.listen(PORT, () => {
-      console.log(`🚀 SharePlate Server running on http://localhost:${PORT}`);
-    });
+   app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+});
   } catch (error) {
     console.error('Failed to start server:', error);
   }
