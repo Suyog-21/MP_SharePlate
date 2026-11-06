@@ -1,0 +1,8 @@
+node_modules
+uploads/ngo-documents/*
+!uploads/ngo-documents/.gitkeep
+# Environment variables
+.env
+.env.*
+!.env.example
+

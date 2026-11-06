@@ -13,7 +13,7 @@ const NGODashboard = () => {
   const availablePosts = posts.filter(p => p.status === 'Available');
   
   // Posts claimed by this NGO
-  const myClaims = posts.filter(p => p.claimedByNgoId === user.uid && p.status !== 'Completed');
+  const myClaims = posts.filter(p => (p.claimedByNgoId === user?.uid || p.claimedByNgoId === user?._id) && p.status !== 'Completed');
 
   const handleClaim = async (postId) => {
     setClaimingId(postId);

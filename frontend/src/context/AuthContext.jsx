@@ -7,51 +7,93 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('ecoUser');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+  // Check active session on initial page load
+  const checkAuth = async () => {
+    try {
+      const res = await fetch(`${API_URL}/auth/me`, {
+        credentials: 'include',
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data.user);
+      } else {
+        setUser(null);
+      }
+    } catch (err) {
+      console.error('Session check failed:', err);
+      setUser(null);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
+  };
+
+  useEffect(() => {
+    checkAuth();
   }, []);
 
   const login = async (email, password) => {
     const res = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+      credentials: 'include',
+      body: JSON.stringify({ email, password }),
     });
-    
+
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Login failed');
-    
+    if (!res.ok) {
+      throw new Error(data.error || 'Login failed. Please check credentials.');
+    }
+
     setUser(data);
-    localStorage.setItem('ecoUser', JSON.stringify(data));
     return data;
   };
 
-  const register = async (name, email, password, role) => {
-    const res = await fetch(`${API_URL}/auth/register`, {
+  const registerDonor = async (donorData) => {
+    const res = await fetch(`${API_URL}/auth/register-donor`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password, role })
+      credentials: 'include',
+      body: JSON.stringify(donorData),
     });
-    
+
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Registration failed');
-    
+    if (!res.ok) {
+      throw new Error(data.error || 'Donor registration failed.');
+    }
+
     setUser(data);
-    localStorage.setItem('ecoUser', JSON.stringify(data));
     return data;
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('ecoUser');
+  const logout = async () => {
+    try {
+      await fetch(`${API_URL}/auth/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch (err) {
+      console.error('Logout error:', err);
+    } finally {
+      setUser(null);
+    }
+  };
+
+  const setAuthenticatedUser = (userData) => {
+    setUser(userData);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        login,
+        registerDonor,
+        logout,
+        checkAuth,
+        setAuthenticatedUser,
+      }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );

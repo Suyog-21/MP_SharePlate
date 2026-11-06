@@ -8,7 +8,7 @@ export const DBProvider = ({ children }) => {
 
   const fetchPosts = useCallback(async () => {
     try {
-      const res = await fetch(`${API_URL}/posts`);
+      const res = await fetch(`${API_URL}/posts`, { credentials: 'include' });
       if (res.ok) {
         const data = await res.json();
         setPosts(data);
@@ -20,7 +20,7 @@ export const DBProvider = ({ children }) => {
 
   // Poll every 5 seconds to simulate real-time updates
   useEffect(() => {
-    fetchPosts(); // Initial fetch
+    fetchPosts();
     const interval = setInterval(fetchPosts, 5000);
     return () => clearInterval(interval);
   }, [fetchPosts]);
@@ -29,10 +29,11 @@ export const DBProvider = ({ children }) => {
     const res = await fetch(`${API_URL}/posts`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(postData)
+      credentials: 'include',
+      body: JSON.stringify(postData),
     });
     const newPost = await res.json();
-    setPosts(prev => [newPost, ...prev]);
+    setPosts((prev) => [newPost, ...prev]);
     return newPost;
   };
 
@@ -43,20 +44,23 @@ export const DBProvider = ({ children }) => {
     await fetch(`${API_URL}/posts/${postId}/status`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+      credentials: 'include',
+      body: JSON.stringify(body),
     });
 
     // Optimistic UI update
-    setPosts(prev => prev.map(p => {
-      if (p.id === postId) {
-        return { ...p, status, claimedByNgoId: ngoId || p.claimedByNgoId };
-      }
-      return p;
-    }));
+    setPosts((prev) =>
+      prev.map((p) => {
+        if (p.id === postId) {
+          return { ...p, status, claimedByNgoId: ngoId || p.claimedByNgoId };
+        }
+        return p;
+      })
+    );
   };
 
   return (
-    <DBContext.Provider value={{ posts, addPost, updatePostStatus }}>
+    <DBContext.Provider value={{ posts, addPost, updatePostStatus, fetchPosts }}>
       {children}
     </DBContext.Provider>
   );

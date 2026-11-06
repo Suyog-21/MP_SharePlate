@@ -15,10 +15,10 @@ const RestaurantDashboard = () => {
   const [instructions, setInstructions] = useState('');
 
   // Filter posts belonging to this restaurant
-  const myPosts = posts.filter(p => p.restaurantId === user.uid);
+  const myPosts = posts.filter(p => p.restaurantId === user?.uid || p.restaurantId === user?._id);
   
   // Calculate impact
-  const totalMeals = user.stats.totalDonations + myPosts.reduce((acc, p) => p.status === 'Completed' ? acc + p.quantity : acc, 0);
+  const totalMeals = (user?.stats?.totalDonations || 0) + myPosts.reduce((acc, p) => p.status === 'Completed' ? acc + p.quantity : acc, 0);
   const co2Reduced = totalMeals * 0.5; // approx 0.5kg CO2 per meal saved
 
   const handlePostFood = async (e) => {
